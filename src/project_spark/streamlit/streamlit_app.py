@@ -362,9 +362,9 @@ def main():
                     with col1:
                         st.metric("Wave", wave_number)
                     with col2:
-                        st.metric("Client", client_name.title())
+                        st.metric("Client", client_name.upper())
                     with col3:
-                        st.metric("Platform", platform.title())
+                        st.metric("Platform", platform.upper())
                     with col4:
                         st.metric("Year", project_year)
 
