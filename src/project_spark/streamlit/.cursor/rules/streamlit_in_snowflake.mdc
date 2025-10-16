@@ -1,0 +1,202 @@
+---
+alwaysApply: false
+---
+---
+description: Streamlit-in-Snowflake tips and good practice
+globs: **/*.py
+alwaysApply: true
+---
+
+- Documentation: @https://docs.snowflake.com/en/developer-guide/streamlit/about-streamlit
+- Limitations: @https://docs.snowflake.com/en/developer-guide/streamlit/limitations
+- When using SQL in .py files, remember this must be Snowflake-flavored SQL
+	- Trailing commas are just fine
+
+
+(Crawled limitations page from June 11th 2025)
+
+# Limitations and library changes [¶](mdc:https:/docs.snowflake.com/en/developer-guide/streamlit/limitations\#limitations-and-library-changes "Link to this heading")
+
+This topic describes limitations and feature behavior changes when a Streamlit feature
+works differently in Snowflake than in the open-source library.
+
+## Unsupported Streamlit features [¶](mdc:https:/docs.snowflake.com/en/developer-guide/streamlit/limitations\#unsupported-streamlit-features "Link to this heading")
+
+The following Streamlit features are not supported in Streamlit in Snowflake:
+
+- [st.bokeh\_chart](mdc:https:/docs.streamlit.io/1.39.0/develop/api-reference/charts/st.bokeh_chart)
+
+- [st.set\_page\_config](mdc:https:/docs.streamlit.io/1.39.0/develop/api-reference/configuration/st.set_page_config)
+
+
+> The `page_title`, `page_icon`, and `menu_items` properties of the
+> `st.set_page_config` command are not supported.
+
+- [st.components.v1.iframe](mdc:https:/docs.streamlit.io/1.39.0/develop/api-reference/custom-components/st.components.v1.iframe)
+
+- [st.components.v1.declare\_component](mdc:https:/docs.streamlit.io/1.39.0/develop/api-reference/custom-components/st.components.v1.declare_component)
+
+- Anchor links
+
+
+## Limitations when loading external resources in Streamlit in Snowflake [¶](mdc:https:/docs.snowflake.com/en/developer-guide/streamlit/limitations\#limitations-when-loading-external-resources-in-sis "Link to this heading")
+
+All Streamlit in Snowflake apps run within the [Content Security Policy (CSP)](mdc:https:/content-security-policy.com) that restricts which resources can be
+loaded. Snowflake blocks loading code — including scripts, styles, fonts, and iframe embedding — from any external domain. However, loading a subset of resources from Mapbox is supported.
+
+When you use the [st.map](mdc:https:/docs.streamlit.io/develop/api-reference/charts/st.map) or
+[st.pydeck\_chart](mdc:https:/docs.streamlit.io/develop/api-reference/charts/st.pydeck_chart)
+Streamlit commands, Mapbox provides the map tiles when rendering map content.
+Mapbox is a third-party application and is subject to Snowflake’s
+[External Offerings Terms](mdc:https:/www.snowflake.com/legal/external-offering-terms).
+
+Loading images or media from external domains is supported in Streamlit in Snowflake, but not in the Snowflake Native App Framework.
+
+For example, the following code runs without a Python error, but the script is not loaded or executed in the browser:
+
+``
+This will not work
+import streamlit.components.v1 as components
+components.html("""
+<script src="http://www.example.com/example.js"></script>
+""", height=0)
+``
+
+Copy
+
+The CSP also blocks front-end calls that are generally considered unsafe, such as `eval()`.
+
+
+Instruction on deploying streamlit using SQL:
+
+Create and deploy Streamlit apps using SQL
+This topic describes how to deploy a Streamlit app in Snowflake by using SQL commands. It describes how to deploy single-page and multi-page Streamlit apps.
+
+Create a Streamlit app by using SQL
+Before creating a Streamlit app by using SQL, ensure that you meet the required prerequisites.
+
+To create a Streamlit app in Snowflake by using SQL commands, perform each of the following tasks:
+
+Create the Streamlit files on your local file system
+
+Upload your Streamlit files to a named stage
+
+Create a STREAMLIT object
+
+View a Streamlit app
+
+Create the Streamlit files on your local file system
+This section describes how to create a single-page or multi-page Streamlit app.
+
+On your local file system, create your main Streamlit app.
+
+Optional: If you are creating a multi-page Streamlit app, create a folder called pages on your local file system, and then add the additional Streamlit pages to this subfolder.
+
+Optional: To include external packages in your Streamlit app, create an environment.yml file. For information about including external packages, see Manage packages by using the environment.yml file.
+
+After you create the Streamlit pages, your directory structure should look similar to this:
+
+└── streamlit/
+    └── environment.yml
+    └── streamlit_main.py
+    └── pages/
+         └── data_frame_demo.py
+         └── plot_demo.py
+Note
+
+The environment.yml file and the optional pages subfolder must be at the same level as your main Streamlit file. Any additional Streamlit pages must be included within the pages subfolder.
+
+Upload your Streamlit files to a named stage
+To create a Streamlit app in Streamlit in Snowflake, you must upload your application files to a named stage.
+
+To upload application files, do one of the following:
+
+Upload the application files by using Snowsight, as described in Staging files using Snowsight.
+
+Upload the application files by using SnowSQL, as shown in the following example:
+
+PUT file:///<path_to_your_root_folder>/streamlit/streamlit_main.py @streamlit_db.streamlit_schema.streamlit_stage overwrite=true auto_compress=false;
+PUT file:///<path_to_your_root_folder>/streamlit/environment.yml @streamlit_db.streamlit_schema.streamlit_stage overwrite=true auto_compress=false;
+PUT file:///<path_to_your_root_folder>/streamlit/pages/streamlit_page_2.py @streamlit_db.streamlit_schema.streamlit_stage/pages/ overwrite=true auto_compress=false;
+PUT file:///<path_to_your_root_folder>/streamlit/pages/streamlit_page_3.py @streamlit_db.streamlit_schema.streamlit_stage/pages/ overwrite=true auto_compress=false;
+Create a STREAMLIT object
+A STREAMLIT object is a database object in Snowflake that encapsulates the files required by your Streamlit app.
+
+To create a STREAMLIT object, run the CREATE STREAMLIT command, as shown in the following example:
+
+CREATE STREAMLIT hello_streamlit
+ROOT_LOCATION = '@streamlit_db.streamlit_schema.streamlit_stage'
+MAIN_FILE = 'streamlit_main.py'
+QUERY_WAREHOUSE = my_warehouse;
+This command creates a STREAMLIT object named hello_streamlit based on the path and file specified in ROOT_LOCATION and MAIN_FILE.
+
+Note
+
+Although the QUERY_WAREHOUSE clause is optional, you must specify a query warehouse to be able to run the Streamlit app in Snowflake.
+
+To verify that the Streamlit object was created, run the SHOW STREAMLITS command:
+
+SHOW STREAMLITS;
+Manage packages by using the environment.yml file
+To install additional Python packages in your Streamlit app:
+
+Create an environment.yml file on your local file system.
+
+To upload the file to the stage location specified by the ROOT_LOCATION parameter of the STREAMLIT object, run the PUT command.
+
+Packages listed in the environment.yml are installed from the Snowflake Anaconda Channel.
+
+The following sample environment.yml shows how to install scikit-learn within the Streamlit environment:
+
+name: sf_env
+channels:
+- snowflake
+dependencies:
+- scikit-learn
+The name and channels properties are required. Also, the - snowflake key is required under the channels property.
+
+Note
+
+You can only install packages listed in the Snowflake Anaconda Channel. Streamlit in Snowflake does not support external Anaconda channels.
+
+Pin the Streamlit version in the environment.yml file
+To pin the Streamlit version in the environment.yml file, include a streamlit dependency as shown in the following example:
+
+name: sf_env
+channels:
+- snowflake
+dependencies:
+- scikit-learn
+- streamlit=1.31.1
+View a Streamlit app
+To view information about the STREAMLIT object, run the DESCRIBE STREAMLIT command, as shown in the following example:
+
+DESC STREAMLIT hello_streamlit;
+To view your Streamlit app in Snowsight, see View a Streamlit app.
+
+Manage STREAMLIT objects
+After creating a STREAMLIT object, use the ALTER STREAMLIT command to modify different properties as described in the following sections.
+
+Rename a STREAMLIT object
+To rename a STREAMLIT object, use the RENAME TO clause of the ALTER STREAMLIT command, as shown in the following example:
+
+ALTER STREAMLIT hello_streamlit RENAME TO hello_snowflake;
+Change the stage or main file in a STREAMLIT object
+To change the path to the stage for a STREAMLIT object, use the ALTER STREAMLIT command to set the ROOT_LOCATION property of the object, as shown in the following example:
+
+ALTER STREAMLIT hello_streamlit SET ROOT_LOCATION = '@snowflake_db.snowflake_schema.snowflake_stage'
+To change the main Streamlit file in a STREAMLIT object, use the ALTER STREAMLIT command to set the MAIN_FILE property of the object, as shown in the following example:
+
+ALTER STREAMLIT hello_streamlit SET MAIN_FILE = 'snowflake_main.py'
+Change the query warehouse assigned to a STREAMLIT object
+To add a query warehouse or change the current query warehouse for a STREAMLIT object, use the ALTER STREAMLIT command to set the QUERY_WAREHOUSE property of the object, as shown in the following example:
+
+ALTER STREAMLIT hello_streamlit SET QUERY_WAREHOUSE = my_new_warehouse;
+List available STREAMLIT objects
+To list the Streamlit apps that are available to your current role, run the SHOW STREAMLITS command, as shown in the following example:
+
+SHOW STREAMLITS;
+Delete a STREAMLIT object
+To delete a STREAMLIT object, run the DROP STREAMLIT command, as shown in the following example:
+
+DROP STREAMLIT hello_streamlit;

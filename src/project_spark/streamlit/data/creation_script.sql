@@ -1,0 +1,30 @@
+-- Campaign Data Processing Schema Creation Script
+-- 
+-- IMPORTANT: This file is for reference only. All actual schema creation
+-- is handled by the Python application using centralized SQL generators
+-- in sql_templates.py to avoid duplication and ensure consistency.
+--
+-- Schema format: CLIENT_{CLIENT_NAME}_{PLATFORM}_{YEAR}
+-- Example: CLIENT_CATERPILLAR_META_2024
+--
+-- To generate actual SQL statements, use:
+--   from sql_templates import generate_schema_creation_statements, generate_view_creation_statement
+--   statements = generate_schema_creation_statements(schema_name)
+--   view_sql = generate_view_creation_statement(schema_name)
+--
+-- This approach ensures:
+-- 1. Single source of truth for all SQL definitions
+-- 2. Consistent table structures across all components
+-- 3. Easy maintenance - change once, update everywhere
+-- 4. No duplication errors or inconsistencies
+
+-- Example COPY INTO statements (uncomment and modify as needed)
+-- COPY INTO {SCHEMA_NAME}.PROCESSED_CAMPAIGN_DATA
+-- FROM '@{SCHEMA_NAME}_stage/processed_campaign_data.csv'
+-- FILE_FORMAT = (TYPE = CSV FIELD_DELIMITER = ',' SKIP_HEADER = 1 NULL_IF = ('NULL', 'null', ''))
+-- ON_ERROR = 'CONTINUE';
+
+-- COPY INTO {SCHEMA_NAME}.NAMING_KEYS
+-- FROM '@{SCHEMA_NAME}_stage/processed_naming_data.csv'
+-- FILE_FORMAT = (TYPE = CSV FIELD_DELIMITER = ',' SKIP_HEADER = 1 NULL_IF = ('NULL', 'null', ''))
+-- ON_ERROR = 'CONTINUE';
