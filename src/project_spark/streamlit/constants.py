@@ -18,7 +18,7 @@ VALID_PLATFORMS: List[str] = [
 
 MAX_FILE_SIZE_MB: int = 50
 ALLOWED_FILE_TYPES: List[str] = ['csv']
-MAX_WAVE_NUMBER: int = 10
+MAX_WAVE_NUMBER: int = 100
 MIN_WAVE_NUMBER: int = 1
 MIN_PROJECT_YEAR: int = 2000
 MAX_PROJECT_YEAR: int = 2090
@@ -275,7 +275,7 @@ NAMING_COLUMN_TYPES = {
 # ============================================================================
 
 APP_TITLE: str = "Spark No. 9 - Campaign Data Processor"
-APP_ICON: str = "🚀"
+APP_ICON: str = ""
 DEFAULT_CLIENT: str = ""
 DEFAULT_PLATFORM: str = ""
 DEFAULT_WAVE: int = 1

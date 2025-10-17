@@ -229,7 +229,8 @@ def main():
         project_year = st.number_input(
             "Project Year",
             min_value=constants.MIN_PROJECT_YEAR,
-            max_value=constants.MAX_PROJECT_YEAR
+            max_value=constants.MAX_PROJECT_YEAR,
+            value=datetime.now().year
         )
     
     
