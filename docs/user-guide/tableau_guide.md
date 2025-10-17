@@ -1,5 +1,7 @@
 # Tableau User Guide for sparkno9
 
+Version 1.0 | Last Updated: 17 October 2025
+
 Welcome to the Tableau User Guide! This guide is designed for users who are new to Business Intelligence (BI) tools and will walk you through the essential steps to create meaningful visualizations and reports in Tableau.
 
 ## Table of Contents
