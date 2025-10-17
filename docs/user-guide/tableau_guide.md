@@ -41,6 +41,11 @@ Before connecting, make sure you have:
 - **Authentication Credentials**
   - **Key-pair Authentication** is required (see setup below).
 - **Snowflake ODBC Driver** – Version 3.4.0 or newer (required for key-pair authentication).
+   - Install on Windows: [Snowflake ODBC Driver (Windows) Docs](https://docs.snowflake.com/en/developer-guide/odbc/odbc-windows)
+ - **OpenSSL (Windows)** – Needed to generate key pairs if you don't already have keys.
+   - Download: [Win64/Win32 OpenSSL installers](https://slproweb.com/products/Win32OpenSSL.html)
+ - **Tableau Desktop** – Required for authoring and publishing from desktop.
+   - Download: [Tableau Desktop (Free Trial)](https://www.tableau.com/products/desktop/download)
 - **Private Key File** – `.p8` or `.pem` file, provided by your administrator and stored securely on your computer.
   - **Never share your private key file.**
 
