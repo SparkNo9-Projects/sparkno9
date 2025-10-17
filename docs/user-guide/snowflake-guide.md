@@ -1,6 +1,6 @@
 # Spark No. 9 - Campaign Data Processor User Guide
 
-**Version 1.0** | Last Updated: October 2024
+**Version 1.0** | Last Updated: 17 October 2025
 
 ---
 
