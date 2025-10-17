@@ -149,9 +149,9 @@ You will also notice that inside "Projects," you can find **Streamlit** and **Wo
 
 ## Setting Up Secure Authentication
 
-Key-pair authentication is now mandatory for paid Snowflake accounts. You must complete this setup to enable secure access, especially for connecting through automated tools or scripts.
+This step is important because it sets up a secure connection between Tableau and Snowflake using key-pair authentication. Without it, you won’t be able to connect Tableau to paid Snowflake account.
 
-> **Note**: This section is mandatory for paid Snowflake accounts. If you have a free trial account, this may be optional, but it's strongly recommended for better security. Contact your administrator if you're unsure about your account type.
+> **Note**: Paid Snowflake accounts require this setup. If you’re using Tableau with a free trial Snowflake account, it may be optional, but it is still strongly recommended for better security. If you aren’t sure which account type you have, check with your administrator.
 
 ### What is Key-Pair Authentication?
 
@@ -584,8 +584,6 @@ Final processing steps and summary.
 ```
 
 ### Step 5: Review the Results
-
-**[SCREENSHOT PLACEHOLDER: Success message and metrics]**
 
 After successful processing, you'll see:
 
